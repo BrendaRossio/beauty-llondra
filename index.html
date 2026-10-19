@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beauty Llondra | Salón de Belleza</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/chat-widget.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="container header__inner">
+      <div class="logo">
+        <span class="logo__icon">✦</span>
+        <span class="logo__text">BEAUTY LLONDRA</span>
+      </div>
+      <nav class="nav">
+        <a href="#inicio" class="nav__link active">Inicio</a>
+        <a href="#nosotros" class="nav__link">Nosotros</a>
+        <a href="#servicios" class="nav__link">Servicios</a>
+        <a href="#reservas" class="nav__link">Reservas</a>
+        <a href="#galeria" class="nav__link">Galería</a>
+        <a href="#contacto" class="nav__link">Contacto</a>
+      </nav>
+      <div class="header__actions" id="headerActions">
+        <a href="login.html" class="btn btn--ghost">Ingresar</a>
+      </div>
+      <button class="nav__toggle" id="navToggle" aria-label="Abrir menú">☰</button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="inicio">
+    <div class="hero__media">
+      <img src="img/hero-estilista.png" alt="Puerta del salón" class="hero__image">
+      <div class="hero__overlay"></div>
+    </div>
+    <div class="container hero__inner">
+      <div class="hero__text">
+        <span class="hero__eyebrow">Salón de belleza · Santa Cruz de la Sierra</span>
+        <h1>Resalta tu<br><em>belleza única</em></h1>
+        <p>Cuidado profesional para tu cabello, manos y rostro, en un espacio pensado para ti.</p>
+        <a href="#reservas" class="btn btn--primary">Reserva tu cita ahora</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICIOS -->
+  <section class="services" id="servicios">
+
+    <div class="services__intro">
+      <span class="section-eyebrow">Nuestros servicios</span>
+      <h2 class="section-title">Todo lo que hacemos por ti</h2>
+    </div>
+
+    <article class="service-hero">
+      <div class="service-hero__media">
+        <img src="img/servicio-manicure.png"alt="Manicure" class="service-hero__image">
+        <div class="service-hero__overlay"></div>
+      </div>
+      <div class="service-hero__inner">
+        <div class="service-hero__content">
+          <h3>Manicure</h3>
+          <p>Cuidado y color para tus manos, con acabado impecable y productos de calidad.</p>
+          <div class="service-hero__footer">
+            <span class="service-hero__price">Desde Bs 50</span>
+            <button class="btn btn--primary btn--reservar" data-servicio="Manicure">Reservar este servicio</button>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="service-hero service-hero--reverse">
+      <div class="service-hero__media">
+        <img src="img/servicio-pedicure.png" alt="Pedicure" class="service-hero__image">
+        <div class="service-hero__overlay"></div>
+      </div>
+      <div class="service-hero__inner">
+        <div class="service-hero__content">
+          <h3>Pedicure</h3>
+          <p>Relajación y cuidado profundo para tus pies, en un ambiente pensado para ti.</p>
+          <div class="service-hero__footer">
+            <span class="service-hero__price">Desde Bs 60</span>
+            <button class="btn btn--primary btn--reservar" data-servicio="Pedicure">Reservar este servicio</button>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="service-hero">
+      <div class="service-hero__media">
+        <img src="img/servicio-alisado.png" alt="Alisado de cabello" class="service-hero__image">
+        <div class="service-hero__overlay"></div>
+      </div>
+      <div class="service-hero__inner">
+        <div class="service-hero__content">
+          <h3>Alisado de cabello</h3>
+          <p>Brillo, suavidad y un acabado profesional que dura semanas.</p>
+          <div class="service-hero__footer">
+            <span class="service-hero__price">Desde Bs 250</span>
+            <button class="btn btn--primary btn--reservar" data-servicio="Alisado de cabello">Reservar este servicio</button>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="service-hero service-hero--reverse">
+      <div class="service-hero__media">
+        <img src="img/servicio-maquillaje.png" alt="Maquillaje" class="service-hero__image">
+        <div class="service-hero__overlay"></div>
+      </div>
+      <div class="service-hero__inner">
+        <div class="service-hero__content">
+          <h3>Maquillaje</h3>
+          <p>Un look impecable para cualquier ocasión, resaltando lo mejor de ti.</p>
+          <div class="service-hero__footer">
+            <span class="service-hero__price">Desde Bs 150</span>
+            <button class="btn btn--primary btn--reservar" data-servicio="Maquillaje">Reservar este servicio</button>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="service-hero">
+      <div class="service-hero__media">
+        <img src="img/servicio-limpieza-facial.png" alt="Limpieza facial" class="service-hero__image">
+        <div class="service-hero__overlay"></div>
+      </div>
+      <div class="service-hero__inner">
+        <div class="service-hero__content">
+          <h3>Limpieza facial</h3>
+          <p>Piel limpia, fresca y radiante, con un tratamiento profundo y relajante.</p>
+          <div class="service-hero__footer">
+            <span class="service-hero__price">Desde Bs 120</span>
+            <button class="btn btn--primary btn--reservar" data-servicio="Limpieza facial">Reservar este servicio</button>
+          </div>
+        </div>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- RESERVAS -->
+  <section class="booking" id="reservas">
+    <div class="container">
+      <div class="booking__card">
+
+        <div class="booking__media">
+          <img src="img/reservas-salon.png" alt="Interior del salón Beauty Llondra" class="booking__media-image">
+          <div class="booking__media-overlay"></div>
+          <div class="booking__media-text">
+            <span class="section-eyebrow section-eyebrow--light">Reserva tu cita</span>
+            <h2>Consiente tu belleza,<br><em>hoy mismo</em></h2>
+            <p>Elige tu servicio, fecha y hora. Confirmamos por WhatsApp con tu QR de pago (seña de Bs 50).</p>
+          </div>
+        </div>
+
+        <form class="booking-form" id="bookingForm">
+          <div class="booking-form__row">
+            <label for="servicio">Servicio</label>
+            <select id="servicio" required>
+              <option value="" disabled selected>Selecciona un servicio</option>
+              <option value="Manicure">Manicure</option>
+              <option value="Pedicure">Pedicure</option>
+              <option value="Alisado de cabello">Alisado de cabello</option>
+              <option value="Maquillaje">Maquillaje</option>
+              <option value="Limpieza facial">Limpieza facial</option>
+            </select>
+          </div>
+
+          <div class="booking-form__row booking-form__row--split">
+            <div>
+              <label for="fecha">Fecha</label>
+              <input type="date" id="fecha" required>
+            </div>
+            <div>
+              <label for="hora">Hora</label>
+              <input type="time" id="hora" required>
+            </div>
+          </div>
+
+          <div class="booking-form__row">
+            <label for="nombre">Tu nombre</label>
+            <input type="text" id="nombre" placeholder="Ej: María Pérez" required>
+          </div>
+
+          <button type="submit" class="btn btn--primary booking-form__submit">
+            Reservar por WhatsApp
+          </button>
+        </form>
+
+      </div>
+    </div>
+  </section>
+  
+  <!-- CHAT IA FLOTANTE -->
+  <button class="chat-fab" id="chatFab">💬</button>
+
+  <div class="chat-window" id="chatWindow">
+    <div class="chat-window__header">
+      <div class="chat-window__avatar">🌸</div>
+      <div class="chat-window__title">
+        <strong>Divina Assistant</strong>
+        <span>¡Hola! Soy Divina, tu asistente IA</span>
+      </div>
+      <button class="chat-window__close" id="chatClose">&times;</button>
+    </div>
+
+    <div class="chat-window__body" id="chatBody">
+      <!-- Los mensajes se agregan aquí dinámicamente con JS -->
+    </div>
+
+    <div class="chat-window__footer">
+      <input type="text" class="chat-window__input" id="chatInput" placeholder="Escribe tu mensaje...">
+      <button class="chat-window__send" id="chatSend">➤</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/session.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/chat-widget.js"></script>
+</body>
+</html>

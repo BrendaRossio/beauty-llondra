@@ -1,0 +1,209 @@
+/* ---- BOTÓN FLOTANTE ---- */
+.chat-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+  border: none;
+  box-shadow: 0 8px 24px rgba(201, 168, 117, 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  z-index: 900;
+  transition: transform 0.2s;
+}
+
+.chat-fab:hover {
+  transform: scale(1.08);
+}
+
+.chat-fab.chat-fab--hidden {
+  display: none;
+}
+
+/* ---- VENTANA DEL CHAT ---- */
+.chat-window {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 380px;
+  max-width: calc(100vw - 32px);
+  height: 560px;
+  max-height: calc(100vh - 48px);
+  background: var(--color-white);
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(61, 46, 43, 0.25);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 900;
+  animation: chatIn 0.25s ease;
+}
+
+.chat-window.chat-window--open {
+  display: flex;
+}
+
+@keyframes chatIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* header del chat */
+.chat-window__header {
+  background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+  color: var(--color-white);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chat-window__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.chat-window__title {
+  flex: 1;
+}
+
+.chat-window__title strong {
+  display: block;
+  font-size: 14px;
+}
+
+.chat-window__title span {
+  font-size: 11px;
+  opacity: 0.85;
+}
+
+.chat-window__close {
+  background: none;
+  border: none;
+  color: var(--color-white);
+  font-size: 20px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+/* área de mensajes */
+.chat-window__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--color-blush);
+}
+
+.chat-msg {
+  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.chat-msg--bot {
+  background: var(--color-white);
+  color: var(--color-text);
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+.chat-msg--user {
+  background: var(--color-gold);
+  color: var(--color-white);
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+/* botones rápidos (chips) */
+.chat-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-self: flex-start;
+  max-width: 90%;
+}
+
+.chat-chip {
+  background: var(--color-white);
+  border: 1.5px solid var(--color-gold);
+  color: var(--color-gold-dark);
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.chat-chip:hover {
+  background: var(--color-gold);
+  color: var(--color-white);
+}
+
+/* input inferior */
+.chat-window__footer {
+  padding: 14px;
+  border-top: 1px solid var(--color-pink-light);
+  display: flex;
+  gap: 8px;
+  background: var(--color-white);
+}
+
+.chat-window__input {
+  flex: 1;
+  border: 1.5px solid var(--color-pink-light);
+  border-radius: 20px;
+  padding: 10px 16px;
+  font-family: var(--font-body);
+  font-size: 13px;
+}
+
+.chat-window__input:focus {
+  outline: none;
+  border-color: var(--color-gold);
+}
+
+.chat-window__send {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-gold);
+  color: var(--color-white);
+  font-size: 16px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.chat-window__send:hover {
+  background: var(--color-gold-dark);
+}
+
+/* responsive: pantalla completa en móvil */
+@media (max-width: 480px) {
+  .chat-window {
+    bottom: 0;
+    right: 0;
+    width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+}
