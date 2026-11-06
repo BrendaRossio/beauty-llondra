@@ -6,7 +6,7 @@ navToggle.addEventListener('click', () => {
 });
 
 // ---- RESERVA: guarda en Supabase + abre WhatsApp ----
-const WHATSAPP_NUMBER = "59169582276";
+const WHATSAPP_NUMBER = "59175672567";
 
 const bookingForm = document.getElementById('bookingForm');
 
@@ -35,7 +35,7 @@ bookingForm.addEventListener('submit', async (e) => {
     servicio_id: servicioData?.id ?? null,
     fecha: fecha,
     hora: hora,
-    origen: 'formulario'
+    origen: window.reservaDesdeChat ? 'chat_ia' : 'formulario'
   });
 
   submitBtn.disabled = false;

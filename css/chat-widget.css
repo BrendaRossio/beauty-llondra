@@ -246,3 +246,38 @@
 .chat-whatsapp-btn:hover {
   background: #1ebe5b;
 }
+
+/* Botones finales del chat */
+.chat-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.chat-action-btn {
+  display: block;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  background: var(--color-gold);
+  color: var(--color-white);
+  padding: 11px 18px;
+  border-radius: 20px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.chat-action-btn:hover {
+  background: var(--color-gold-dark);
+}
+
+.chat-action-btn.chat-whatsapp-btn {
+  background: #25D366;
+}
+
+.chat-action-btn.chat-whatsapp-btn:hover {
+  background: #1ebe5b;
+} 

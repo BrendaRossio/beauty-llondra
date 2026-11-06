@@ -1,5 +1,5 @@
 // ---- WIDGET DE CHAT conectado a la IA (Gemini) ----
-// Usa WHATSAPP_NUMBER, que ya está definido en main.js (por eso no lo repetimos aquí)
+// Usa WHATSAPP_NUMBER, que ya está definido en main.js
 
 const chatFab = document.getElementById('chatFab');
 const chatWindow = document.getElementById('chatWindow');
@@ -8,26 +8,24 @@ const chatBody = document.getElementById('chatBody');
 const chatInput = document.getElementById('chatInput');
 const chatSend = document.getElementById('chatSend');
 
-// Historial de la conversación (se envía completo a la IA en cada turno)
 let historial = [];
-// Datos que la IA va completando
 let estadoReserva = { servicio: null, fecha: null, hora: null, nombre: null };
-let reservaGuardada = false;
+let conversacionTerminada = false; // la IA ya recopiló todo
+let reservaGuardada = false;       // evita guardar dos veces en la base de datos
 
-chatFab.addEventListener('click', () => {
+function abrirChat() {
   chatWindow.classList.add('chat-window--open');
   chatFab.classList.add('chat-fab--hidden');
+  if (chatBody.children.length === 0) iniciarConversacion();
+}
 
-  if (chatBody.children.length === 0) {
-    iniciarConversacion();
-  }
-});
-
-chatClose.addEventListener('click', () => {
+function cerrarChat() {
   chatWindow.classList.remove('chat-window--open');
   chatFab.classList.remove('chat-fab--hidden');
-});
+}
 
+chatFab.addEventListener('click', abrirChat);
+chatClose.addEventListener('click', cerrarChat);
 chatSend.addEventListener('click', enviarMensaje);
 chatInput.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') enviarMensaje();
@@ -48,7 +46,7 @@ async function iniciarConversacion() {
 
 async function enviarMensaje() {
   const texto = chatInput.value.trim();
-  if (!texto || reservaGuardada) return;
+  if (!texto || conversacionTerminada) return;
 
   mostrarMensajeUsuario(texto);
   chatInput.value = '';
@@ -65,7 +63,8 @@ async function enviarMensaje() {
   actualizarEstado(data);
 
   if (data.listo) {
-    await confirmarReserva();
+    conversacionTerminada = true;
+    mostrarBotonesFinales();
   }
 }
 
@@ -73,10 +72,10 @@ async function llamarIA(mensajes) {
   try {
     const res = await fetch(CHAT_IA_URL, {
       method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-          'apikey': SUPABASE_ANON_KEY
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'apikey': SUPABASE_ANON_KEY
       },
       body: JSON.stringify({ mensajes })
     });
@@ -103,27 +102,9 @@ function actualizarEstado(data) {
   if (data.nombre) estadoReserva.nombre = data.nombre;
 }
 
-// Cuando la IA marca listo=true: guarda en Supabase + muestra botón de WhatsApp
-async function confirmarReserva() {
-  reservaGuardada = true;
+// ---------- FINAL DE LA CONVERSACIÓN: dos botones ----------
 
-  const { data: servicioData } = await supabaseClient
-    .from('servicios')
-    .select('id')
-    .eq('nombre', estadoReserva.servicio)
-    .single();
-
-  const { data: { session } } = await supabaseClient.auth.getSession();
-
-  await supabaseClient.from('reservas').insert({
-    usuario_id: session?.user?.id ?? null,
-    nombre_cliente: estadoReserva.nombre,
-    servicio_id: servicioData?.id ?? null,
-    fecha: estadoReserva.fecha,
-    hora: estadoReserva.hora,
-    origen: 'chat_ia'
-  });
-
+function armarUrlWhatsApp() {
   const mensaje =
 `¡Hola! Quiero confirmar mi cita 💅 (reservada con Divina, tu asistente IA)
 
@@ -132,21 +113,81 @@ async function confirmarReserva() {
 *Hora:* ${estadoReserva.hora}
 *Nombre:* ${estadoReserva.nombre}
 
-Quedo atenta al QR para la seña de Bs 50 🙌`;
+Quedo atenta al QR para pagar la seña de Bs 50 y confirmar mi cita 🙌`;
 
-  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
+}
 
+function mostrarBotonesFinales() {
   const div = document.createElement('div');
   div.className = 'chat-msg chat-msg--bot';
   div.innerHTML = `
-    <p style="margin-bottom:10px;">¡Todo listo! Confirma tu cita en WhatsApp 👇</p>
-    <a href="${url}" target="_blank" class="chat-whatsapp-btn">Confirmar en WhatsApp</a>
+    <p>¡Todo listo, ${estadoReserva.nombre}! ¿Cómo quieres continuar?</p>
+    <div class="chat-actions">
+      <button type="button" class="chat-action-btn" id="btnIrFormulario">Revisar y confirmar mi reserva</button>
+      <a href="${armarUrlWhatsApp()}" target="_blank" class="chat-action-btn chat-whatsapp-btn" id="btnWhatsappDirecto">Confirmar directo por WhatsApp</a>
+    </div>
   `;
   chatBody.appendChild(div);
   scrollAbajo();
+
+  document.getElementById('btnIrFormulario').addEventListener('click', prellenarFormulario);
+  document.getElementById('btnWhatsappDirecto').addEventListener('click', guardarReservaChat);
 }
 
-// ---- Helpers de interfaz ----
+// Opción 1: rellena el formulario de reservas y lleva a la clienta hasta ahí
+function prellenarFormulario() {
+  const campos = {
+    servicio: estadoReserva.servicio,
+    fecha: estadoReserva.fecha,
+    hora: estadoReserva.hora,
+    nombre: estadoReserva.nombre
+  };
+
+  Object.entries(campos).forEach(([id, valor]) => {
+    const el = document.getElementById(id);
+    if (el && valor) {
+      el.value = valor;
+      el.classList.add('booking-form__field--highlight');
+      setTimeout(() => el.classList.remove('booking-form__field--highlight'), 2500);
+    }
+  });
+
+  // main.js lee esto para guardar la reserva con origen "chat_ia"
+  window.reservaDesdeChat = true;
+
+  cerrarChat();
+  document.getElementById('reservas').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Opción 2: guarda la reserva (una sola vez) mientras se abre WhatsApp
+async function guardarReservaChat() {
+  if (reservaGuardada) return;
+  reservaGuardada = true;
+
+  try {
+    const { data: servicioData } = await supabaseClient
+      .from('servicios')
+      .select('id')
+      .eq('nombre', estadoReserva.servicio)
+      .single();
+
+    const { data: { session } } = await supabaseClient.auth.getSession();
+
+    await supabaseClient.from('reservas').insert({
+      usuario_id: session?.user?.id ?? null,
+      nombre_cliente: estadoReserva.nombre,
+      servicio_id: servicioData?.id ?? null,
+      fecha: estadoReserva.fecha,
+      hora: estadoReserva.hora,
+      origen: 'chat_ia'
+    });
+  } catch (error) {
+    console.error('No se pudo guardar la reserva:', error);
+  }
+}
+
+// ---------- Helpers de interfaz ----------
 
 function mostrarMensajeBot(texto) {
   const div = document.createElement('div');
